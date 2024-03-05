@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SciChart.Charting;
 using SciChart.Charting.ChartModifiers;
 using SciChart.Core.Utility.Mouse;
 
@@ -14,8 +15,7 @@ namespace SciChart_FIFOScrollingCharts.Modifiers
 
         public MyXAxisDragModifier()
         {
-            this.ClipModeX = SciChart.Charting.ClipMode.None;
-            this.DragMode = SciChart.Charting.AxisDragModes.Pan;
+            this.ClipModeX = ClipMode.None;
         }
 
         public override void OnModifierMouseDown(ModifierMouseArgs e)
@@ -30,9 +30,41 @@ namespace SciChart_FIFOScrollingCharts.Modifiers
             if (isOnAxis)
             {
                 this.StopTracking?.Invoke(this, new EventArgs());
+                if (e.Modifier == MouseModifier.Ctrl)
+                {
+                    this.DragMode = AxisDragModes.Scale;
+                }
+                else
+                {
+                    this.DragMode = AxisDragModes.Pan;
+                }
             }
             
             base.OnModifierMouseDown(e);
+        }
+
+        public override void OnModifierMouseWheel(ModifierMouseArgs e)
+        {
+            base.OnModifierMouseWheel(e);
+
+            var xAxis = GetXAxis(this.AxisId);
+            bool isOnAxis = IsPointWithinBounds(e.MousePoint, xAxis);
+            if (isOnAxis)
+            {
+                this.StopTracking?.Invoke(this, new EventArgs());
+
+
+                if (e.Modifier == MouseModifier.Ctrl)
+                {
+                    double zoomFactor = 0.1 * e.Delta / 120d;
+                    xAxis.ZoomBy(-zoomFactor, -zoomFactor);
+                }
+                else
+                {
+                    double numPixels = 0.1 * e.Delta;
+                    xAxis.Scroll(-numPixels, ClipMode.None);
+                }
+            }
         }
     }
 }

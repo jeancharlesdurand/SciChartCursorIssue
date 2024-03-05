@@ -1,8 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29509.3
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SciChart_FIFOScrollingCharts", "SciChart_FIFOScrollingCharts.csproj", "{984E36A0-D1F4-4ECC-9415-0A3BE0EBF9D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SciChart_RealChart", "SciChart_RealChart.csproj", "{984E36A0-D1F4-4ECC-9415-0A3BE0EBF9D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

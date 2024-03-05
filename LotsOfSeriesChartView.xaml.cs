@@ -1,4 +1,4 @@
-// *************************************************************************************
+﻿// *************************************************************************************
 // SCICHART® Copyright SciChart Ltd. 2011-2023. All rights reserved.
 //  
 // Web: http://www.scichart.com
@@ -14,6 +14,7 @@
 // expressed or implied. 
 // *************************************************************************************
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Timers;
@@ -29,10 +30,10 @@ using SciChart_FIFOScrollingCharts;
 
 namespace SciChart.Examples.Examples.CreateRealtimeChart
 {
-    public partial class RealtimeFifoChartView : UserControl
+    public partial class LotsOfSeriesChartView : UserControl
     {
-        // Data Sample Rate (sec) - 200 Hz
-        private const double dt = 0.005;
+        // Data Sample Rate (sec) - 20 Hz
+        private const double dt = 0.05;
         private double _t = dt;
 
         // Timer to process updates
@@ -43,20 +44,18 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
         private readonly Random _random = new Random();
 
         // The dataseries to fill
-        private IXyDataSeries<DateTime, double> series0;
-        private IXyDataSeries<DateTime, double> series1;
-        private IXyDataSeries<DateTime, double> series2;
+        private List<IXyDataSeries<DateTime, double>> _seriesList;
 
         private TimedMethod _startDelegate;
 
         private volatile bool _isTrackingEnabled;
         private bool _isCursorEnabled;
 
-        public RealtimeFifoChartView()
+        public LotsOfSeriesChartView()
         {
             InitializeComponent();
 
-            //this.sciChart.Loaded += OnChartLoaded;
+            _seriesList = new List<IXyDataSeries<DateTime, double>>();
 
             _isTrackingEnabled = false;
             this.myXAxisDragModifier.StopTracking += MyXAxisDragModifier_StopTracking;
@@ -72,11 +71,6 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
             this.myXYCursor.SetInitialRelativePosition(0.5);
         }
 
-        private void OnChartLoaded(object sender, RoutedEventArgs e)
-        {
-            //this.myXYCursor.InitilaizeAxisId(sciChart.XAxes.First().Id, sciChart.YAxes.First().Id);
-        }
-
         private void MyXAxisDragModifier_StopTracking(object sender, EventArgs e)
         {
             ChangeTrackingEnableFromCode(false);
@@ -84,74 +78,82 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
 
         private void SetupXAxis()
         {
-            TimeSpan halfSpan = TimeSpan.FromHours(0.25);
+            TimeSpan halfSpan = TimeSpan.FromHours(0.125);
             DateRange range = new DateRange(_currentTime - halfSpan, _currentTime + halfSpan);
-            this.xAxis.VisibleRange = range;    
+            this.xAxis.VisibleRange = range;
         }
 
         private void CreateDataSetAndSeries()
         {
             // Create new Dataseries of type X=DateTime, Y=double
-            series0 = new XyDataSeries<DateTime, double>();
-            series0.AcceptsUnsortedData = false;
-            series1 = new XyDataSeries<DateTime, double>();
-            series0.AcceptsUnsortedData = false;
-            series2 = new XyDataSeries<DateTime, double>();
-            series0.AcceptsUnsortedData = false;
+            for (int i = 0; i != 30; ++i)
+            {
+                _seriesList.Add(new XyDataSeries<DateTime, double>() { AcceptsUnsortedData = false });
+            }
 
             // Set the dataseries on the chart's RenderableSeries
-            RenderableSeries0.DataSeries = series0;
-            RenderableSeries1.DataSeries = series1;
-            RenderableSeries2.DataSeries = series2;
+            for (int i = 0; i < sciChart.RenderableSeries.Count; ++i)
+            {
+                sciChart.RenderableSeries[i].DataSeries = _seriesList[i];
+            }
         }
 
         private void ClearDataSeries()
         {
             using (sciChart.SuspendUpdates())
             {
-                series0?.Clear();
-                series1?.Clear();
-                series2?.Clear();
+                _seriesList.ForEach(series => series.Clear());
             }
         }
 
         private void OnNewData(object sender, EventArgs e)
         {
-            // Compute our three series values
-            //double y1 = 3.0 * Math.Sin(2 * Math.PI * 1.4) + _random.NextDouble() * 0.5;
-            //double y2 = 2.0 * Math.Cos(2 * Math.PI * 0.8) + _random.NextDouble() * 0.5;
-            //double y3 = 1.0 * Math.Sin(2 * Math.PI * 2.2) + _random.NextDouble() * 0.5;
-
-            double y1 = 3.0 * Math.Sin(2 * Math.PI * 1.4 * _t * 0.5);
-            double y2 = 2.0 * Math.Cos(2 * Math.PI * 0.8 * _t * 0.5);
-            double y3 = 1.0 * Math.Sin(2 * Math.PI * 2.2 * _t * 0.5);
+            double y1 = 3.0 * Math.Sin(2 * Math.PI * _t * 0.5);
+            double y2 = 2.0 * Math.Cos(2 * Math.PI * _t * 0.5);
+            double y3 = 1.0 * Math.Sin(2 * Math.PI * _t * 0.5);
 
             // Suspending updates is optional, and ensures we only get one redraw
             // once all three dataseries have been appended to
             using (sciChart.SuspendUpdates())
             {
+                for(int i = 0; i < _seriesList.Count; ++i)
+                {
+                    double y;
+                    if (i % 2 == 0)
+                    {
+                        y = i * Math.Sin(2 * Math.PI * _t * 0.5);
+                    }
+                    else
+                    {
+                        y = i * Math.Cos(2 * Math.PI * _t * 0.5);
+                    }
+
+
+                    _seriesList[i].Append(_currentTime, y);
+                }
+
                 // Append x,y data to previously created series
-                series0.Append(_currentTime, y1);
-                series1.Append(_currentTime, y2);
-                series2.Append(_currentTime, y3);
+                //_seriesList[0].Append(_currentTime, y1);
+                //_seriesList[1].Append(_currentTime, y2);
+                //_seriesList[2].Append(_currentTime, y3);
 
                 //update x visible range if tracking is on
                 if (this._isTrackingEnabled)
                 {
-                    this.UpdateTimeVisibleRangeToMax();
+                    this.UpdateTimeVisibleRangeToLastTime();
                 }
             }
 
             // Increment current time
             _currentTime += TimeSpan.FromSeconds(1);
-            _t += dt;    
+            _t += dt;
         }
 
-        private void UpdateTimeVisibleRangeToMax()
+        private void UpdateTimeVisibleRangeToLastTime()
         {
             this.Dispatcher.Invoke(() =>
             {
-                this.xAxis.VisibleRange = new DateRange(_currentTime - TimeSpan.FromHours(0.5), _currentTime);
+                this.xAxis.VisibleRange = new DateRange(_currentTime - TimeSpan.FromHours(0.25), _currentTime);
                 this.myXYCursor.UpdateCursorPositionOnXAxisVisibleRangeChanged();
             });
         }
@@ -194,8 +196,6 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
         private void OnExampleLoaded(object sender, RoutedEventArgs e)
         {
             ResetButton_Click(this, null);
-
-            //_startDelegate = TimedMethod.Invoke(() => StartButton_Click(this, null)).After(500).Go();
         }
 
         private void OnExampleUnloaded(object sender, RoutedEventArgs e)
