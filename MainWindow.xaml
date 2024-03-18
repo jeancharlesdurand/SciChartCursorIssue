@@ -3,6 +3,6 @@
     <!--Switch between two modes:
         1 - High frequency (200Hz) data feed and redraw with 3 series
         2 - Low frequency (20Hz) data feed and redraw with 20 series -->
-    <example:HighFreqChartView/>
-    <!--<example:LotsOfSeriesChartView />-->
+    <!--<example:HighFreqChartView/>-->
+    <example:LotsOfSeriesChartView />
 </Window>

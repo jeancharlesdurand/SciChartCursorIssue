@@ -90,7 +90,7 @@
                     <!-- Set YAxisDragModifier.AxisId = yAxis1.Id -->
                     <!-- This will allow dragging on only the secondary y axis -->
                     <modifiers:MyXAxisDragModifier x:Name="myXAxisDragModifier" AxisId="{Binding ElementName=xAxis, Path=Id}"/>
-                    <modifiers:MyXYCursor x:Name="myXYCursor" />
+                    <modifiers:MyXYCursor_RelativeX x:Name="myXYCursor" />
                 </s:ModifierGroup>
             </s:SciChartSurface.ChartModifier>
 

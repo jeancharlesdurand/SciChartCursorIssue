@@ -25,14 +25,16 @@ namespace SciChart_FIFOScrollingCharts.Modifiers
         public MyXYCursor()
         {
             SolidColorBrush colorBrush = new SolidColorBrush(Colors.Red);
+            SolidColorBrush foreColorBrush = new SolidColorBrush(Colors.White);
             this._cursor = new VerticalLineAnnotation()
             {
                 IsEditable = true,
                 IsHidden = true,
                 LabelPlacement = LabelPlacement.Axis,
+                ShowLabel = true,
                 FontSize = 12,
                 Stroke = colorBrush,
-                Foreground = colorBrush,
+                Foreground = foreColorBrush,
                 StrokeThickness = 2.0
             };
 

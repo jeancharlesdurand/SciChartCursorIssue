@@ -154,7 +154,7 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
             this.Dispatcher.Invoke(() =>
             {
                 this.xAxis.VisibleRange = new DateRange(_currentTime - TimeSpan.FromHours(0.25), _currentTime);
-                this.myXYCursor.UpdateCursorPositionOnXAxisVisibleRangeChanged();
+                //this.myXYCursor.UpdateCursorPositionOnXAxisVisibleRangeChanged();
             });
         }
 
