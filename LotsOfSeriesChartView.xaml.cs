@@ -27,6 +27,7 @@ using SciChart.Charting.Visuals.RenderableSeries;
 using SciChart.Core.Utility;
 using SciChart.Data.Model;
 using SciChart_FIFOScrollingCharts;
+using SciChart_FIFOScrollingCharts.Modifiers;
 
 namespace SciChart.Examples.Examples.CreateRealtimeChart
 {
@@ -51,6 +52,8 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
         private volatile bool _isTrackingEnabled;
         private bool _isCursorEnabled;
 
+        private ICursor _xyCursor;
+
         public LotsOfSeriesChartView()
         {
             InitializeComponent();
@@ -68,7 +71,14 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
             CreateDataSetAndSeries();
 
             SetupXAxis();
-            this.myXYCursor.SetInitialRelativePosition(0.5);
+            this.InitializeCursor();
+        }
+
+        private void InitializeCursor()
+        {
+            _xyCursor = new MyXYCursor_RelativeX(this.xAxis);
+            modifierGroup.ChildModifiers.Add(_xyCursor);
+            this._xyCursor.SetInitialRelativePosition(0.5);
         }
 
         private void MyXAxisDragModifier_StopTracking(object sender, EventArgs e)
@@ -223,7 +233,7 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
         private void CursorButton_Click(object sender, RoutedEventArgs e)
         {
             this._isCursorEnabled = !this._isCursorEnabled;
-            this.myXYCursor.SetVisible(this._isCursorEnabled);
+            this._xyCursor.SetVisible(this._isCursorEnabled);
         }
     }
 }

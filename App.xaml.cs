@@ -1,5 +1,7 @@
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using SciChart.Charting;
 using SciChart.Charting.Visuals;
 using SciChart.Examples.ExternalDependencies.Controls.ExceptionView;
 
@@ -14,7 +16,19 @@ namespace SciChartExport
         {
 		     DispatcherUnhandledException += OnDispatcherUnhandledException;
 
-			 InitializeComponent();
+            Task.Run(() =>
+            {
+                try
+                {
+                    VisualXcceleratorEngine.UseAutoShutdown = false;
+                    VisualXcceleratorEngine.RestartEngine();
+                }
+                catch
+                {
+                }
+            });
+
+            InitializeComponent();
 
             // TODO: Put your SciChart Runtime License Key here if needed
             // SciChartSurface.SetRuntimeLicenseKey(@"{YOUR SCICHART WPF v8 RUNTIME LICENSE KEY}");

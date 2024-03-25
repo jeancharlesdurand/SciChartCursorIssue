@@ -13,7 +13,7 @@ using SciChart.Data.Model;
 
 namespace SciChart_FIFOScrollingCharts.Modifiers
 {
-    public class MyXYCursor : VerticalSliceModifier
+    public class MyXYCursor : VerticalSliceModifier, ICursor
     {
         private VerticalLineAnnotation _cursor;
         private double? _pixelCoordX = null;
