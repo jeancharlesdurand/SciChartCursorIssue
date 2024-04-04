@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Threading;
 using SciChart.Charting;
 using SciChart.Charting.Visuals;
+using SciChart.Drawing.VisualXcceleratorRasterizer;
 using SciChart.Examples.ExternalDependencies.Controls.ExceptionView;
 
 namespace SciChartExport
@@ -21,7 +22,7 @@ namespace SciChartExport
                 try
                 {
                     VisualXcceleratorEngine.UseAutoShutdown = false;
-                    VisualXcceleratorEngine.RestartEngine();
+                    VisualXcceleratorEngine.RestartEngine(); 
                 }
                 catch
                 {

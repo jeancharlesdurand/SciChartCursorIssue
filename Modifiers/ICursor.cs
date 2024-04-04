@@ -11,5 +11,6 @@ namespace SciChart_FIFOScrollingCharts.Modifiers
     {
         void SetInitialRelativePosition(double position);
         void SetVisible(bool isVisible);
+        void SetCusrorStatic(bool isStatic);
     }
 }

@@ -39,6 +39,10 @@
             <ToggleButton x:Name="CursorButton" ToolTip="Activate Cursor" Click="CursorButton_Click" Style="{StaticResource DefaultToggleButtonStyle}">
                 <ext:ToolbarIcon Kind="Tooltip" Height="12" Width="12" Style="{StaticResource ToolbarButtonIconStyle}"/>
             </ToggleButton>
+
+            <ToggleButton x:Name="StaticCursorButton" ToolTip="Static Cursor" Click="StaticCursorButton_Click" Style="{StaticResource DefaultToggleButtonStyle}">
+                <ext:ToolbarIcon Kind="ArrowDown" Height="12" Width="12" Style="{StaticResource ToolbarButtonIconStyle}"/>
+            </ToggleButton>
         </ext:SciChartInteractionToolbar>
 
         <!--  Define the SciChartSurface  -->

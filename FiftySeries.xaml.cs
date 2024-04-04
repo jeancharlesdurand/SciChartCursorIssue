@@ -30,7 +30,7 @@ namespace SciChart_RealChart
         private const double dt = 0.1;
         private double _t = dt;
 
-        // Timer to process updates
+        // Timer to process updates 
         private readonly Timer _timerNewDataUpdate;
 
         // The current time

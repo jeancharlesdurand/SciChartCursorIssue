@@ -51,6 +51,7 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
 
         private volatile bool _isTrackingEnabled;
         private bool _isCursorEnabled;
+        private bool _isStaticCursor;
 
         private ICursor _xyCursor;
 
@@ -64,6 +65,7 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
             this.myXAxisDragModifier.StopTracking += MyXAxisDragModifier_StopTracking;
 
             _isCursorEnabled = false;
+            _isStaticCursor = false;
 
             _timerNewDataUpdate = new Timer(dt * 1000) { AutoReset = true };
             _timerNewDataUpdate.Elapsed += OnNewData;
@@ -78,7 +80,6 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
         {
             _xyCursor = new MyXYCursor_RelativeX(this.xAxis);
             modifierGroup.ChildModifiers.Add(_xyCursor);
-            this._xyCursor.SetInitialRelativePosition(0.5);
         }
 
         private void MyXAxisDragModifier_StopTracking(object sender, EventArgs e)
@@ -233,7 +234,20 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
         private void CursorButton_Click(object sender, RoutedEventArgs e)
         {
             this._isCursorEnabled = !this._isCursorEnabled;
+            this.StaticCursorButton.IsEnabled = !_isCursorEnabled;
+
+            if (!this._isStaticCursor)
+            {
+                this._xyCursor.SetInitialRelativePosition(0.5);
+            }
+
             this._xyCursor.SetVisible(this._isCursorEnabled);
         }
+
+        private void StaticCursorButton_Click(object sender, RoutedEventArgs e)
+        {
+            this._isStaticCursor = !this._isStaticCursor;
+            this._xyCursor.SetCusrorStatic(this._isStaticCursor);
+        }        
     }
 }

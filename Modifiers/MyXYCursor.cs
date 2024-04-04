@@ -158,5 +158,9 @@ namespace SciChart_FIFOScrollingCharts.Modifiers
         {
             this._cursor.X1 = value;
         }
+
+        public void SetCusrorStatic(bool isStatic)
+        {
+        }
     }
 }

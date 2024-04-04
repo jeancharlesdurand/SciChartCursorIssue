@@ -11,6 +11,7 @@ using SciChart.Charting.ChartModifiers;
 using SciChart.Charting.Visuals;
 using SciChart.Charting.Visuals.Annotations;
 using SciChart.Charting.Visuals.Axes;
+using SciChart.Core.Utility.Mouse;
 using SciChart.Data.Model;
 using SciChart_RealChart;
 
@@ -81,13 +82,12 @@ namespace SciChart_FIFOScrollingCharts.Modifiers
 
         private void UpdateCursorLabel()
         {
-            if (this._cursor.IsHidden ||  this._cursor.X1 == null) 
+            if (this._cursor.IsHidden ||  this._cursor.X1 == null || this._isStatic) 
             {
                 return;
             }
 
             DateRange dateRange = this.XAxis.VisibleRange as DateRange;
-
             double diffAsdouble = dateRange.Diff.ToOADate();
             double minAsDouble = dateRange.Min.ToOADate();
 
@@ -117,6 +117,49 @@ namespace SciChart_FIFOScrollingCharts.Modifiers
             {
                 base.HandleMasterMouseEvent(mousePoint);
             }
+        }
+
+        private bool _isStatic = false;
+        public void SetCusrorStatic(bool isStatic)
+        {
+            // make the assumption here that we can't change it multiple times
+            // and if cursor is already visible
+            if (!this._cursor.IsHidden)
+            {
+                return;
+            }
+
+            _isStatic = isStatic;
+
+            if (_isStatic)
+            {
+                this._cursor.CoordinateMode = AnnotationCoordinateMode.Absolute;
+                this._cursor.IsEditable = false;
+                this.ShowAxisLabels = false;
+                this._cursor.ShowLabel = false;
+
+                if (this.XAxis != null)
+                {
+                    DateRange dateRange = this.XAxis.VisibleRange as DateRange;
+                    this._cursor.X1 = dateRange.Max;
+                }
+            }
+        }
+
+        public override void OnModifierMouseDown(ModifierMouseArgs e)
+        {
+            if (!this._isStatic)
+            {
+                return;
+            }
+
+            System.Windows.Point xy = e.MousePoint;
+            // Translates the mouse point (from root grid coords) to ModifierSurface coords
+            var pixelCoordX = base.GetPointRelativeTo(xy, base.ModifierSurface).X;
+            // you can now use this coordinate to convert to data values
+            DateTime dataValue = (DateTime)ParentSurface.XAxes.First().GetDataValue(pixelCoordX);
+            this._cursor.X1 = dataValue;
+            //this._cursor.LabelValue = dataValue;
         }
     }   
 }
