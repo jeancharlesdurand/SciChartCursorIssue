@@ -60,7 +60,7 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
             InitializeComponent();
 
             _isTrackingEnabled = false;
-            this.myXAxisDragModifier.StopTracking += MyXAxisDragModifier_StopTracking;
+            //this.myXAxisDragModifier.StopTracking += MyXAxisDragModifier_StopTracking;
 
             _isCursorEnabled = false;
 
@@ -75,7 +75,7 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
 
         private void InitializeCursor()
         {
-            _xyCursor = new MyXYCursor_RelativeX(this.xAxis);
+            _xyCursor = new MyXYCursor_RelativeX(this.xAxis, this.first);
             modifierGroup.ChildModifiers.Add(_xyCursor);
             this._xyCursor.SetInitialRelativePosition(0.5);
         }
@@ -98,9 +98,9 @@ namespace SciChart.Examples.Examples.CreateRealtimeChart
             series0 = new XyDataSeries<DateTime, double>();
             series0.AcceptsUnsortedData = false;
             series1 = new XyDataSeries<DateTime, double>();
-            series0.AcceptsUnsortedData = false;
+            series1.AcceptsUnsortedData = false;
             series2 = new XyDataSeries<DateTime, double>();
-            series0.AcceptsUnsortedData = false;
+            series2.AcceptsUnsortedData = false;
 
             // Set the dataseries on the chart's RenderableSeries
             RenderableSeries0.DataSeries = series0;

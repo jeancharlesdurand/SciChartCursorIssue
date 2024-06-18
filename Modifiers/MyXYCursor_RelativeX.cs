@@ -13,7 +13,6 @@ using SciChart.Charting.Visuals.Annotations;
 using SciChart.Charting.Visuals.Axes;
 using SciChart.Core.Utility.Mouse;
 using SciChart.Data.Model;
-using SciChart_RealChart;
 
 namespace SciChart_FIFOScrollingCharts.Modifiers
 {
@@ -22,7 +21,7 @@ namespace SciChart_FIFOScrollingCharts.Modifiers
         private VerticalLineAnnotation _cursor;
         private bool _isDragging = false;
 
-        public MyXYCursor_RelativeX(IAxis axis)
+        public MyXYCursor_RelativeX(IAxis xAxis, IAxis yReferenceAxis)
         {
             SolidColorBrush colorBrush = new SolidColorBrush(Colors.Red);
             SolidColorBrush foreColorBrush = new SolidColorBrush(Colors.White);
@@ -49,9 +48,15 @@ namespace SciChart_FIFOScrollingCharts.Modifiers
             this.ShowAxisLabels = true;
             this.UseInterpolation = true;
 
-            if (axis != null)
+            if (xAxis != null)
             {
-                axis.VisibleRangeChanged += XAxis_VisibleRangeChanged;
+                xAxis.VisibleRangeChanged += XAxis_VisibleRangeChanged;
+                this._cursor.XAxisId = xAxis.Id;
+            }
+
+            if (yReferenceAxis != null)
+            {
+                this._cursor.YAxisId = yReferenceAxis.Id;
             }
         }                
 
@@ -98,10 +103,10 @@ namespace SciChart_FIFOScrollingCharts.Modifiers
         Point lastMousePoint = new Point();
         protected override void HandleMasterMouseEvent(Point mousePoint)
         {
-            if (this._cursor.IsHidden)
-            {
-                return;
-            }
+            //if (this._cursor.IsHidden)
+            //{
+            //    return;
+            //}
 
             if (_isDragging)
             {
@@ -159,7 +164,6 @@ namespace SciChart_FIFOScrollingCharts.Modifiers
             // you can now use this coordinate to convert to data values
             DateTime dataValue = (DateTime)ParentSurface.XAxes.First().GetDataValue(pixelCoordX);
             this._cursor.X1 = dataValue;
-            //this._cursor.LabelValue = dataValue;
         }
     }   
 }

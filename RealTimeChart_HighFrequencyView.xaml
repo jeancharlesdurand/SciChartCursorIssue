@@ -6,7 +6,8 @@
              Unloaded="OnExampleUnloaded"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals" xmlns:modifiers="clr-namespace:SciChart_FIFOScrollingCharts.Modifiers"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals" 
+             xmlns:modifiers="clr-namespace:SciChart_FIFOScrollingCharts.Modifiers"
              d:DesignHeight="400"
              d:DesignWidth="600"
              mc:Ignorable="d">
@@ -49,18 +50,19 @@
             <s:SciChartSurface.RenderableSeries>
                 <s:FastLineRenderableSeries x:Name="RenderableSeries0"
                                             Stroke="{StaticResource MainThemeStrokeColor}"
-                                            StrokeThickness="3" />
+                                            StrokeThickness="3" YAxisId="First" XAxisId="TOTO"/>
                 <s:FastLineRenderableSeries x:Name="RenderableSeries1"
                                             Stroke="{StaticResource SecondaryThemeStrokeColor}"
-                                            StrokeThickness="3" />
+                                            StrokeThickness="3" YAxisId="Second" XAxisId="TOTO"/>
                 <s:FastLineRenderableSeries x:Name="RenderableSeries2"
                                             Stroke="{StaticResource ExtraThemeStrokeColor_2}"
-                                            StrokeThickness="3" />
+                                            StrokeThickness="3" YAxisId="Third" XAxisId="TOTO"/>
             </s:SciChartSurface.RenderableSeries>
 
             <!--  Create an X Axis  -->
             <s:SciChartSurface.XAxis>
                 <s:DateTimeAxis x:Name="xAxis" 
+                                Id="TOTO"
                                 MinHeight="50"
                                 AutoRange="Never"
                                 AxisTitle="Time"
@@ -72,24 +74,54 @@
             </s:SciChartSurface.XAxis>
 
             <!--  Create a Y Axis  -->
-            <s:SciChartSurface.YAxis>
-                <s:NumericAxis AxisAlignment="Left"
+            <s:SciChartSurface.YAxes>
+                <s:NumericAxis x:Name="first"
+                    Id="First"
+                               AxisAlignment="Left"
                                AutoRange="Never"
                                AxisTitle="Value"
                                DrawMinorGridLines="False"
                                DrawMinorTicks="False" 
-                               TextFormatting="0.00">
+                               TextFormatting="0.00"
+                               BorderBrush="{StaticResource MainThemeSolidBrush}"
+                               TickTextBrush="{StaticResource MainThemeSolidBrush}">
                     <s:NumericAxis.VisibleRange>
-                        <s:DoubleRange Min="-5" Max="5"/>
+                        <s:DoubleRange Min="-4" Max="4"/>
                     </s:NumericAxis.VisibleRange>
                 </s:NumericAxis>
-            </s:SciChartSurface.YAxis>
+                <s:NumericAxis Id="Second" 
+                               AxisAlignment="Left"
+                               AutoRange="Never"
+                               AxisTitle="Value"
+                               DrawMinorGridLines="False"
+                               DrawMinorTicks="False" 
+                               TextFormatting="0.00"
+                               BorderBrush="{StaticResource SecondaryThemeSolidBrush}"
+                               TickTextBrush="{StaticResource SecondaryThemeSolidBrush}">
+                    <s:NumericAxis.VisibleRange>
+                        <s:DoubleRange Min="-3" Max="3"/>
+                    </s:NumericAxis.VisibleRange>
+                </s:NumericAxis>
+                <s:NumericAxis Id="Third"                               
+                               AxisAlignment="Left"
+                               AutoRange="Never"
+                               AxisTitle="Value"
+                               DrawMinorGridLines="False"
+                               DrawMinorTicks="False" 
+                               TextFormatting="0.00"
+                               BorderBrush="{StaticResource ExtraThemeStrokeBrush_2}"
+                               TickTextBrush="{StaticResource ExtraThemeStrokeBrush_2}">
+                    <s:NumericAxis.VisibleRange>
+                        <s:DoubleRange Min="-2" Max="2"/>
+                    </s:NumericAxis.VisibleRange>
+                </s:NumericAxis>
+            </s:SciChartSurface.YAxes>
 
             <s:SciChartSurface.ChartModifier>
                 <s:ModifierGroup x:Name="modifierGroup">
                     <!-- Set YAxisDragModifier.AxisId = yAxis1.Id -->
                     <!-- This will allow dragging on only the secondary y axis -->
-                    <modifiers:MyXAxisDragModifier x:Name="myXAxisDragModifier" AxisId="{Binding ElementName=xAxis, Path=Id}"/>
+                    <!--<modifiers:MyXAxisDragModifier x:Name="myXAxisDragModifier" AxisId="{Binding ElementName=xAxis, Path=Id}"/>-->
                 </s:ModifierGroup>
             </s:SciChartSurface.ChartModifier>
 

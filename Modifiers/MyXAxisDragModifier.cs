@@ -13,8 +13,9 @@ namespace SciChart_FIFOScrollingCharts.Modifiers
     {
         public event EventHandler StopTracking;
 
-        public MyXAxisDragModifier()
+        public MyXAxisDragModifier(string xAxisId)
         {
+            this.AxisId = xAxisId;
             this.ClipModeX = ClipMode.None;
         }
 
